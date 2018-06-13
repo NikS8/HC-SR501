@@ -1,27 +1,27 @@
 unsigned long counttime; // выделение памяти для счетчика
 
 #define RELE  13 // назначаем порт для реле
-#define PIR  2 // назначаем порт для PIR sensor
+#define PIR1  2 // назначаем порт для PIR1 sensor
+#define PIR2  3 // назначаем порт для PIR2 sensor
 
 void setup()
 {
 pinMode(RELE, OUTPUT);
-pinMode(PIR, INPUT);
+pinMode(PIR1, INPUT);
+pinMode(PIR2, INPUT);
 }
 
 void loop()
 {
-  // если есть движение включаем реле
-if (digitalRead(PIR) == HIGH) { digitalWrite(RELE, HIGH); }
+    if (digitalRead(PIR1) == HIGH || digitalRead(PIR2) == HIGH) { 
+        counttime = millis();
+    }
 
- // если нет движения
-if (digitalRead(PIR) == LOW) {
+    if (millis() - counttime > 20000) {
+        digitalWrite(RELE, LOW);
+    } else {
+        digitalWrite(RELE, HIGH);
+    }
 
- // включаем счетчик на 10 секунд
-counttime = millis();
-millis() - counttime > 10000;
 
- // если нет движения в течении 10 секунд выключаем реле
-digitalWrite(RELE, LOW);
-}
 }
